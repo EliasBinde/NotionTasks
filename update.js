@@ -43,9 +43,9 @@ export const updateUserDB = async (userKey, databaseID, timeZone) => {
     const dtemp = moment.tz(due, timeZone);
     const ttemp = moment.tz(today, timeZone);
 
-    console.log(dtemp, ttemp);
+    console.log(dtemp.format("LL"), ttemp.format("LL"));
 
-    if (!(due.toDateString() === today.toDateString())) return;
+    if (!(dtemp.format("LL") === ttemp.format("LL"))) return;
 
     const interval = task?.properties?.Interval?.number;
 
