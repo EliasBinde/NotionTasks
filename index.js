@@ -36,7 +36,7 @@ for (const user of users) {
   cron.schedule(
     `${minute} ${hour} * * *`,
     () => {
-      main(user);
+      //main(user);
     },
     {
       scheduled: true,
@@ -44,3 +44,4 @@ for (const user of users) {
     }
   );
 }
+main(users[0]);
