@@ -28,7 +28,7 @@ app.listen(3000, () => {
 
 const main = async (user) => {
   console.log("Updating user:", user.Name);
-  await updateUserDB(user.userKey, user.databaseId);
+  await updateUserDB(user.userKey, user.databaseId, user.timezone);
 };
 
 for (const user of users) {

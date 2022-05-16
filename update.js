@@ -1,6 +1,6 @@
 import { Client } from "@notionhq/client";
 import moment from "moment-timezone";
-export const updateUserDB = async (userKey, databaseID) => {
+export const updateUserDB = async (userKey, databaseID, timeZone) => {
   const notion = new Client({ auth: userKey });
   const databaseId = databaseID;
 
@@ -36,11 +36,14 @@ export const updateUserDB = async (userKey, databaseID) => {
     });
   };
 
-  const updateTask = async (task) => {
+  const updateTask = async (task, timeZone) => {
     const today = new Date();
     const due = new Date(task.properties.Due.date.start);
 
-    console.log(due, today);
+    const dtemp = moment.tz(due, timeZone);
+    const ttemp = moment.tz(today, timeZone);
+
+    console.log(dtemp, ttemp);
 
     if (!(due.toDateString() === today.toDateString())) return;
 
@@ -55,12 +58,12 @@ export const updateUserDB = async (userKey, databaseID) => {
     updateInDb(task, newDue);
   };
 
-  const updateRecurringTasks = async () => {
+  const updateRecurringTasks = async (timeZone) => {
     const tasks = await getTasks();
     const recurringTasks = tasks.filter((task) => checkIfRecurring(task));
     console.log("Recurring tasks:", recurringTasks.length);
-    for (let task of recurringTasks) updateTask(task);
+    for (let task of recurringTasks) updateTask(task, timeZone);
   };
 
-  updateRecurringTasks();
+  updateRecurringTasks(timeZone);
 };
