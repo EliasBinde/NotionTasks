@@ -8,7 +8,7 @@ const users = [
   {
     userKey: process.env.NOTION_KEY,
     databaseId: process.env.NOTION_DATABASE_ID,
-    timeToUpdate: "17:56",
+    timeToUpdate: "23:59",
     timezone: "Europe/Berlin",
   },
 ];
