@@ -8,12 +8,12 @@ const users = [
   {
     userKey: process.env.NOTION_KEY,
     databaseId: process.env.NOTION_DATABASE_ID,
-    timeToUpdate: "17:55",
+    timeToUpdate: "17:56",
     timezone: "Europe/Berlin",
   },
 ];
 
-const main = async () => {
+const main = async (user) => {
   await updateUserDB(user.userKey, user.databaseId);
 };
 
