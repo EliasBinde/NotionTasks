@@ -1,0 +1,21 @@
+{
+  "name": "notion-tasks",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": {
+    "name": "Elias Binde",
+    "email": "eliasbinde@protonmail.com"
+  },
+  "dependencies": {
+    "@notionhq/client": "^1.0.4",
+    "dotenv": "^16.0.1",
+    "moment": "^2.29.3",
+    "moment-timezone": "^0.5.34",
+    "node-cron": "^3.0.0"
+  }
+}
