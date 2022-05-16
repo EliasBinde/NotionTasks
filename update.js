@@ -1,8 +1,7 @@
 import { Client } from "@notionhq/client";
 import moment from "moment-timezone";
-export const updateUserDB = async (userKey, databaseID, timeZone) => {
+export const updateUserDB = async (userKey, databaseId, timeZone) => {
   const notion = new Client({ auth: userKey });
-  const databaseId = databaseID;
 
   const getTasks = async () => {
     const res = (
@@ -20,17 +19,57 @@ export const updateUserDB = async (userKey, databaseID, timeZone) => {
   };
 
   const updateInDb = async (task, newDue) => {
-    await notion.pages.update({
-      page_id: task.id,
+    console.log(task);
+
+    const res = await notion.pages.create({
+      parent: {
+        database_id: databaseId,
+      },
       properties: {
-        Done: {
-          checkbox: false,
+        title: [
+          {
+            type: "text",
+            text: {
+              content: task.properties.Name.title[0].text.content,
+            },
+          },
+        ],
+      },
+    });
+
+    const id = res.id;
+    console.log("rel", task.properties.Project);
+
+    await notion.pages.update({
+      page_id: id,
+      properties: {
+        Tags: {
+          multi_select: task.properties.Tags.multi_select,
         },
+        Priority: {
+          select: task.properties.Priority.select,
+        },
+
         Due: {
           date: {
             start: newDue,
             time_zone: "Europe/Berlin",
           },
+        },
+        Assignee: {
+          people: task.properties.Assignee.people,
+        },
+        Done: {
+          checkbox: false,
+        },
+        Interval: {
+          number: task.properties.Interval.number,
+        },
+        Stage: {
+          select: task.properties.Stage.select,
+        },
+        Project: {
+          relation: task.properties.Project.relation,
         },
       },
     });
@@ -43,8 +82,6 @@ export const updateUserDB = async (userKey, databaseID, timeZone) => {
     const dtemp = moment.tz(due, timeZone);
     const ttemp = moment.tz(today, timeZone);
 
-    console.log(dtemp.format("LL"), ttemp.format("LL"));
-
     if (!(dtemp.format("LL") === ttemp.format("LL"))) return;
 
     const interval = task?.properties?.Interval?.number;
@@ -54,7 +91,6 @@ export const updateUserDB = async (userKey, databaseID, timeZone) => {
       .tz("Europe/Berlin")
       .add(interval, "days")
       .format("YYYY-MM-DDTHH:mm:ss");
-    console.log("Updating task:", task.id);
     updateInDb(task, newDue);
   };
 
