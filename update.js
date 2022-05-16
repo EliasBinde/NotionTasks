@@ -1,6 +1,5 @@
 import { Client } from "@notionhq/client";
 import moment from "moment-timezone";
-
 export const updateUserDB = async (userKey, databaseID) => {
   const notion = new Client({ auth: userKey });
   const databaseId = databaseID;
