@@ -54,8 +54,8 @@ export const updateUserDB = async (userKey, databaseID) => {
 
   const updateRecurringTasks = async () => {
     const tasks = await getTasks();
-    console.log("Found", tasks.length, "tasks");
     const recurringTasks = tasks.filter((task) => checkIfRecurring(task));
+    console.log("Recurring tasks:", recurringTasks.length);
     for (let task of recurringTasks) updateTask(task);
   };
 
