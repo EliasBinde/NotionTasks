@@ -37,6 +37,7 @@ export const updateUserDB = async (userKey, databaseID) => {
   };
 
   const updateTask = async (task) => {
+    console.log("Updating task:", task.properties.Title.string);
     const today = new Date();
     const due = new Date(task.properties.Due.date.start);
     if (!(due.toDateString() === today.toDateString())) return;
