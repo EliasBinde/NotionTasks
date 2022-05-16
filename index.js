@@ -10,7 +10,7 @@ const users = [
     Name: "Elias Binde",
     userKey: process.env.NOTION_KEY,
     databaseId: process.env.NOTION_DATABASE_ID,
-    timeToUpdate: "*:*",
+    timeToUpdate: "23:58",
     timezone: "Europe/Berlin",
   },
 ];
