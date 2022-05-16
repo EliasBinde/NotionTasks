@@ -13,6 +13,13 @@ const users = [
     timeToUpdate: "23:58",
     timezone: "Europe/Berlin",
   },
+  {
+    Name: "Annika",
+    userKey: process.env.KEY_ANNIE,
+    databaseId: process.env.DB_ANNIE,
+    timeToUpdate: "23:58",
+    timezone: "Europe/Berlin",
+  },
 ];
 
 const app = express();
@@ -36,7 +43,7 @@ for (const user of users) {
   cron.schedule(
     `${minute} ${hour} * * *`,
     () => {
-      //main(user);
+      main(user);
     },
     {
       scheduled: true,
