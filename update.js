@@ -18,9 +18,7 @@ export const updateUserDB = async (userKey, databaseId, timeZone) => {
     return type === "Recurring";
   };
 
-  const updateInDb = async (task, newDue) => {
-    console.log(task);
-
+  const updateInDb = async (task, newDue, newEnd) => {
     const res = await notion.pages.create({
       parent: {
         database_id: databaseId,
@@ -38,10 +36,11 @@ export const updateUserDB = async (userKey, databaseId, timeZone) => {
     });
 
     const id = res.id;
-    console.log("rel", task.properties.Project);
 
     await notion.pages.update({
       page_id: id,
+      cover: task.cover,
+      icon: task.icon,
       properties: {
         Tags: {
           multi_select: task.properties.Tags.multi_select,
@@ -53,6 +52,7 @@ export const updateUserDB = async (userKey, databaseId, timeZone) => {
         Due: {
           date: {
             start: newDue,
+            end: newEnd,
             time_zone: "Europe/Berlin",
           },
         },
@@ -77,10 +77,17 @@ export const updateUserDB = async (userKey, databaseId, timeZone) => {
 
   const updateTask = async (task, timeZone) => {
     const today = new Date();
-    const due = new Date(task.properties.Due.date.start);
+    const due = task.properties.Due.date.start
+      ? new Date(task.properties.Due.date.start)
+      : null;
+    const end = task.properties.Due.date.end
+      ? new Date(task.properties.Due.date.end)
+      : null;
 
-    const dtemp = moment.tz(due, timeZone);
     const ttemp = moment.tz(today, timeZone);
+
+    const dtemp = due ? moment.tz(due, timeZone) : null;
+    const tend = end ? moment.tz(end, timeZone) : null;
 
     if (!(dtemp.format("LL") === ttemp.format("LL"))) return;
 
@@ -91,7 +98,14 @@ export const updateUserDB = async (userKey, databaseId, timeZone) => {
       .tz("Europe/Berlin")
       .add(interval, "days")
       .format("YYYY-MM-DDTHH:mm:ss");
-    updateInDb(task, newDue);
+    const newEnd = end
+      ? moment
+          .utc(end)
+          .tz("Europe/Berlin")
+          .add(interval, "days")
+          .format("YYYY-MM-DDTHH:mm:ss")
+      : null;
+    updateInDb(task, newDue, newEnd);
   };
 
   const updateRecurringTasks = async (timeZone) => {
