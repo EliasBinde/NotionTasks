@@ -34,7 +34,7 @@ app.listen(3000, () => {
 });
 
 const main = async (user) => {
-  console.log("Updating user:", user.Name);
+  console.log("Updating entries for user:", user.Name);
   await updateUserDB(user.userKey, user.databaseId, user.timezone);
 };
 
